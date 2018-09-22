@@ -42,14 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IGame.cs" />
+    <Compile Include="Interfaces\IGame.cs" />
     <Compile Include="Models\BattleShip.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\BoardDimension.cs" />
     <Compile Include="Models\Square.cs" />
     <Compile Include="Models\Destroyer.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="Models\IBoardDimension.cs" />
+    <Compile Include="Interfaces\IBoardDimension.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Models\Shot.cs" />
     <Compile Include="Program.cs" />
