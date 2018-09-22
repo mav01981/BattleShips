@@ -10,7 +10,7 @@ namespace Project.BattleShip
         static string s;
         static string columns => "ABCDEFGHIJK";
 
-        static void Draw(int width, List<Coordinates> points)
+        static void Draw(int width, List<Square> points)
         {
             for (int x = width; x > 0; x--)
             {
@@ -29,7 +29,7 @@ namespace Project.BattleShip
                     }
                     else
                     {
-                        s += "" + $"{item.ShipIdentifier } ";
+                        s += "" + $"0 ";
                     }
                 }
 
@@ -50,6 +50,7 @@ namespace Project.BattleShip
 
         static void Main(string[] args)
         {
+            newGame:
             var board = new BoardDimension(10, 10);
             Game game = new Game(board);
             game.RaiseEvent += notifyUser;
@@ -60,23 +61,44 @@ namespace Project.BattleShip
 
             Draw(10, game.coordinates);
 
-            Console.WriteLine("\n Please enter your move e.g A5 ?");
+            Console.WriteLine("\n Please enter your move e.g A5 and press enter ?");
             string coordinate = Console.ReadLine();
 
             char[] keys = coordinate.Trim().ToCharArray();
 
-            if (game.axis.Contains(keys[0]))
+            if (keys.Length > 0 && game.axis.Contains(keys[0]))
             {
                 if (int.TryParse(coordinate.Substring(1, coordinate.Length - 1), out int row))
                 {
-                    if (game.TakeShot(keys[0], row) == Shot.Hit)
+                    var result = game.TakeShot(keys[0], row);
+
+                    if (result == Shot.Hit)
                     {
                         Console.Write($"\n Shot hit {keys[0].ToString()} ");
                         Console.ReadLine();
                     }
-                    else
+                    else if (result == Shot.Miss)
                     {
                         Console.Write($"\n Shot missed {keys[0].ToString()} ");
+                        Console.ReadLine();
+                    }
+                    else if (result == Shot.Wins)
+                    {
+                        Console.WriteLine("\n Would you like to play again ? Y/N");
+                        var response = Console.ReadKey(false).Key;
+                        if (response == ConsoleKey.Y)
+                        {
+                            Console.Clear();
+                            goto newGame;
+                        }
+                        else if (response == ConsoleKey.N)
+                        {
+                            Environment.Exit(0);
+                        }
+                        Console.ReadLine();
+                    }
+                    else
+                    {
                         Console.ReadLine();
                     }
                 }

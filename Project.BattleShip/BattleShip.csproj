@@ -46,7 +46,7 @@
     <Compile Include="Models\BattleShip.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\BoardDimension.cs" />
-    <Compile Include="Models\Coordinates.cs" />
+    <Compile Include="Models\Square.cs" />
     <Compile Include="Models\Destroyer.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Models\IBoardDimension.cs" />

@@ -33,7 +33,7 @@
                     Random random = new Random();
                     int row = random.Next(0, 10);
                     int column = random.Next(this.axis.Length);
-                    bool isVertical = random.Next(100) % 2 == 0; //1 for Horizontal
+                    bool isVertical = random.NextDouble() >= 0.5; //1 for Horizontal
 
                     if (this.coordinates.Where(x => x.Row == row && x.Column == this.axis[column] && x.Occupied == Status.None).Any())
                     {
@@ -68,7 +68,7 @@
                         }
                         else
                         {
-                            var index = (column + (ship.Width - 1)) > maxWidth ? 1 : (column + (ship.Width - 1)) - 1;
+                            var index = (column + (ship.Width)) > maxWidth ? 1 : (column + (ship.Width)) - 1;
 
                             if (this.coordinates.Where(x => x.Column >= this.axis[column] && x.Column <= this.axis[index] && x.Row == row && x.Occupied == Status.None).Count() == ship.Width)
                             {
@@ -107,20 +107,21 @@
         {
             var selectedPoint = this.coordinates.Where(x => x.Column == column && x.Row == row).FirstOrDefault();
 
-            if (selectedPoint.Occupied == Status.Yes  && selectedPoint.ShipIdentifier > 0)
+            if (selectedPoint.ShipIdentifier > 0 & selectedPoint.Occupied != Status.Hit)
             {
                 var selectedShip = Ships.Where(x => x.Id == selectedPoint.ShipIdentifier).FirstOrDefault();
 
-                if (selectedShip != null)
+                if (selectedShip.Width > selectedShip.Hits)
                     selectedShip.Hits++;
 
                 if (selectedShip.IsSunk) RaiseEvent($"{selectedShip.Name} has been sunk.!");
-                if (Ships.Where(x => x.IsSunk == false).Count() == 0) RaiseEvent($"Player 1 Wins.!");
+                if (Ships.Where(x => x.IsSunk == false).Count() == 0) RaiseEvent($"Player 1 Wins. !");
             }
 
             selectedPoint.Occupied = Status.Hit;
 
-            return  selectedPoint.ShipIdentifier > 0 ? Shot.Hit : Shot.Miss;
+            return Ships.Where(x => x.IsSunk == false).Count() == 0 ? Shot.Wins :
+                Ships.Where(x => x.Id == selectedPoint.ShipIdentifier && x.IsSunk == true).Any() ? Shot.Sinks : selectedPoint.ShipIdentifier > 0 ? Shot.Hit : Shot.Miss;
         }
     }
 }

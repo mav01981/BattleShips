@@ -2,7 +2,6 @@
 using Project.BattleShip;
 using Project.BattleShip.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using static Project.BattleShip.Models.Game;
@@ -58,7 +57,7 @@ namespace Project.Tests
               .OrderBy(x => x.Id)
               .ToList();
 
-            Assert.NotEqual(shipsA[0].Items[0], shipsB[0].Items[0]);
+            Assert.NotEqual(shipsA[0].Items[0].Column, shipsB[0].Items[0].Column);
         }
 
         [Fact]
@@ -95,6 +94,28 @@ namespace Project.Tests
             }
 
             Assert.Equal(Shot.Hit, result);
+        }
+
+        [Fact]
+        public void Ship_hit_count_matches_ship_size()
+        {
+            var mockEvent = new Mock<ShipEvent>();
+            Game game = new Game(new BoardDimension(10, 10));
+            game.RaiseEvent += mockEvent.Object;
+
+            while (game.Ships.Where(x => x.IsSunk==false).Count() > 0)
+            {
+                Random random = new Random();
+                game.TakeShot(game.axis[random.Next(1, 10)], random.Next(1, 10));
+            }
+
+            for (int i = 0; i <= 99; i++)
+            {
+                Random random = new Random();
+                game.TakeShot(game.axis[random.Next(1, 10)], random.Next(1, 10));
+            }
+
+            Assert.Equal(5, game.Ships.Where(x => x.Id == 1 && x.IsSunk == true).Select(x => x.Hits).First());
         }
 
         [Fact]

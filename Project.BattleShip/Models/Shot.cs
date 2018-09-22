@@ -3,7 +3,9 @@
     public enum Shot
     {
         Hit,
-        Miss
+        Miss,
+        Sinks,
+        Wins
     }
 
     public enum Status
