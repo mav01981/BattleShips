@@ -10,8 +10,8 @@ The player enters coordinates of the form "A5", where "A" is the column and "5" 
 Shots result in hits, misses or sinks. The game ends when all ships are sunk.
 
 ### Project Requirements
-VS2017.
-BattleShip Project.
-BattleShip.Tests Project.
-Xunit.
-Moq.
+* VS2017.
+* BattleShip Project.
+* BattleShip.Tests Project.
+* Xunit.
+* Moq.
