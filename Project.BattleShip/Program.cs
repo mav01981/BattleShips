@@ -14,7 +14,7 @@ namespace Project.BattleShip
 
             for (int x = width; x > 0; x--)
             {
-                s += "  " + ((x) < 10 ? "0" : "") + (x) + "   ";
+                s += "  " + ((x) < width ? "0" : "") + (x) + "   ";
 
                 for (int y = 1; y <= width; y++)
                 {
