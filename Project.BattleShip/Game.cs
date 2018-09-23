@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
 
     public class Game : Board, IGame
@@ -33,72 +32,50 @@
                     Random random = new Random();
                     int row = random.Next(0, 10);
                     int column = random.Next(this.axis.Length);
-                    bool isVertical = random.NextDouble() >= 0.5; //1 for Horizontal
 
-                    if (this.coordinates.Where(x => x.Row == row && x.Column == this.axis[column] && x.Occupied == Status.None).Any())
+                    var location = new List<Square>();
+
+                    var StartPoint = new Square()
+                    {
+                        Row = random.Next(1, 10),
+                        Column = this.axis[column]
+                    };
+                    location.Add(StartPoint);
+
+                    bool isVertical = random.NextDouble() >= 0.5;
+
+                    for (int i = 1; i <= ship.Width-1; i++)
                     {
                         if (isVertical)
                         {
-                            if (this.coordinates.Where(x => x.Column == this.axis[column] && x.Row >= row && x.Row <= row - (ship.Width - 1) && x.Occupied == Status.None).Count() == ship.Width)
+                            location.Add(new Square()
                             {
-                                this.coordinates
-                                    .Where(x => x.Column == this.axis[column] && x.Row >= row && x.Row <= row - (ship.Width - 1) && x.Occupied == Status.None)
-                                        .ToList()
-                                         .ForEach(x =>
-                                         {
-                                             x.Occupied = Status.Yes;
-                                             x.ShipIdentifier = ship.Id;
-                                         });
-                            }
-                            else if (this.coordinates.Where(x => x.Column == this.axis[column] && x.Row >= row && x.Row <= row + (ship.Width - 1) && x.Occupied == Status.None).Count() == ship.Width)
-                            {
-                                this.coordinates
-                                   .Where(x => x.Column == this.axis[column] && x.Row >= row && x.Row <= row + (ship.Width - 1) && x.Occupied == Status.None)
-                                   .ToList()
-                                    .ForEach(x =>
-                                    {
-                                        x.Occupied = Status.Yes;
-                                        x.ShipIdentifier = ship.Id;
-                                    });
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                                Row = (StartPoint.Row + i),
+                                Column = StartPoint.Column
+                            });
                         }
                         else
                         {
-                            var index = (column + (ship.Width)) > maxWidth ? 1 : (column + (ship.Width)) - 1;
-
-                            if (this.coordinates.Where(x => x.Column >= this.axis[column] && x.Column <= this.axis[index] && x.Row == row && x.Occupied == Status.None).Count() == ship.Width)
+                            location.Add(new Square()
                             {
-                                this.coordinates.Where(x => x.Column >= this.axis[column] && x.Column <= this.axis[index] && x.Row == row && x.Occupied == Status.None)
-                                        .ToList()
-                                       .ForEach(x =>
-                                       {
-                                           x.Occupied = Status.Yes;
-                                           x.ShipIdentifier = ship.Id;
-                                       });
-                            }
-                            else if (this.coordinates.Where(x => x.Column >= this.axis[index] && x.Column <= this.axis[column] && x.Row == row && x.Occupied == Status.None).Count() == ship.Width)
-                            {
-                                this.coordinates
-                                      .Where(x => x.Column >= this.axis[index] && x.Column <= this.axis[column] && x.Row == row && x.Occupied == Status.None)
-                                        .ToList()
-                                       .ForEach(x =>
-                                       {
-                                           x.Occupied = Status.Yes;
-                                           x.ShipIdentifier = ship.Id;
-                                       });
-                            }
-                            else
-                            {
-                                continue;
-                            }
+                                Row = StartPoint.Row,
+                                Column = this.axis[(this.axis.IndexOf(StartPoint.Column) + i) > maxWidth ? 1 : (this.axis.IndexOf(StartPoint.Column) + i)]
+                            });
                         }
-
-                        result = true;
                     }
+
+                    ShipService service = new ShipService(location, this.coordinates);
+
+                    if (service.IsValidLocation(ship.Width))
+                    {
+                        service.AddToBoard(ship.Id);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    result = true;
                 }
             }
         }

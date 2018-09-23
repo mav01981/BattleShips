@@ -35,6 +35,7 @@ namespace Project.Tests
                 Assert.Equal(4, ships.Where(x => x.Id == 2).Select(x => x.Items.Count()).First());
                 Assert.Equal(4, ships.Where(x => x.Id == 3).Select(x => x.Items.Count()).First());
                 Assert.Equal(3, ships.Count());
+
             }
         }
 
@@ -103,7 +104,7 @@ namespace Project.Tests
             Game game = new Game(new BoardDimension(10, 10));
             game.RaiseEvent += mockEvent.Object;
 
-            while (game.Ships.Where(x => x.IsSunk==false).Count() > 0)
+            while (game.Ships.Where(x => x.IsSunk == false).Count() > 0)
             {
                 Random random = new Random();
                 game.TakeShot(game.axis[random.Next(1, 10)], random.Next(1, 10));

@@ -56,7 +56,7 @@ namespace Project.BattleShip
             game.RaiseEvent += notifyUser;
 
             menu:
-            Console.WriteLine("Battleship v1");
+            Console.WriteLine("\n Battleship v1");
             Console.WriteLine();
 
             Draw(10, game.coordinates);
