@@ -83,6 +83,7 @@ namespace Project.BattleShip
                     }
                     else if (result == Shot.Wins)
                     {
+                       GameEnded:
                         Console.WriteLine("\n Would you like to play again ? Y/N");
                         var response = Console.ReadKey(false).Key;
                         if (response == ConsoleKey.Y)
@@ -94,6 +95,12 @@ namespace Project.BattleShip
                         {
                             Environment.Exit(0);
                         }
+                        else
+                        {
+                            Console.Clear();
+                            goto GameEnded;
+                        }
+
                         Console.ReadLine();
                     }
                     else
