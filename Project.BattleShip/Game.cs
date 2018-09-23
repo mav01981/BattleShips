@@ -14,9 +14,9 @@
         public Game(IBoardDimension size) : base(size)
         {
             Ships = new List<Ship>();
-            Ships.Add(new BattleShip() { Id = 1, Name = "HMSBattleship", Width = 5 });
-            Ships.Add(new Destroyer() { Id = 2, Name = "HMSDestroyer", Width = 4 });
-            Ships.Add(new Destroyer() { Id = 3, Name = "HMSDestroyer1", Width = 4 });
+            Ships.Add(new BattleShip() { Id = 1, Name = "HMS Barham", Width = 5 });
+            Ships.Add(new Destroyer() { Id = 2, Name = "Hobart-class destroyer", Width = 4 });
+            Ships.Add(new Destroyer() { Id = 3, Name = "Kashin-class destroyer", Width = 4 });
 
             AddShipsToBoard(Ships, size.Width, size.Height);
         }

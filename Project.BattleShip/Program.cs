@@ -7,11 +7,11 @@ namespace Project.BattleShip
 {
     class Program
     {
-        static string s;
-        static string columns => "ABCDEFGHIJK";
-
         static void Draw(int width, List<Square> points)
         {
+             string s =string.Empty;
+             string columns = "ABCDEFGHIJK";
+
             for (int x = width; x > 0; x--)
             {
                 s += "  " + ((x) < 10 ? "0" : "") + (x) + "   ";
@@ -47,7 +47,6 @@ namespace Project.BattleShip
             s = "";
         }
 
-
         static void Main(string[] args)
         {
             newGame:
@@ -64,7 +63,7 @@ namespace Project.BattleShip
             Console.WriteLine("\n Please enter your move e.g A5 and press enter ?");
             string coordinate = Console.ReadLine();
 
-            char[] keys = coordinate.Trim().ToCharArray();
+            char[] keys = coordinate.Trim().ToUpper().ToCharArray();
 
             if (keys.Length > 0 && game.axis.Contains(keys[0]))
             {
