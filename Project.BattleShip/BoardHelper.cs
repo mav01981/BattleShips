@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Project.BattleShip
 {
-    public class ShipService
+    public class Boardhelper
     {
         private List<Square> compare;
         private List<Square> compareTo;
 
-        public ShipService(List<Square> compare, List<Square> compareTo)
+        public Boardhelper(List<Square> compare, List<Square> compareTo)
         {
             this.compare = compare;
             this.compareTo = compareTo;

@@ -1,18 +1,17 @@
-﻿namespace Project.BattleShip.Models
+﻿
+public class Ship
 {
-    public abstract class Ship
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public virtual int Width { get; set; }
-        public int Hits { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Width { get; set; }
+    public int Hits { get; set; }
 
-        public bool IsSunk
+    public bool IsSunk
+    {
+        get
         {
-            get
-            {
-                return Hits >= Width;
-            }
+            return Hits >= Width;
         }
     }
 }
+

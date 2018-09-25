@@ -14,16 +14,16 @@
         public Game(IBoardDimension size) : base(size)
         {
             Ships = new List<Ship>();
-            Ships.Add(new BattleShip() { Id = 1, Name = "HMS Barham", Width = 5 });
-            Ships.Add(new Destroyer() { Id = 2, Name = "Hobart-class destroyer", Width = 4 });
-            Ships.Add(new Destroyer() { Id = 3, Name = "Kashin-class destroyer", Width = 4 });
+            Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Battleship, "HMS Barham")); /* Id = 1, Name = "HMS Barham", Width = 5 });*/
+            Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Destroyer, "Hobart-class destroyer"));
+            Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Destroyer, "Kashin-class destroyer"));
 
             AddShipsToBoard(Ships, size.Width, size.Height);
         }
 
         public void AddShipsToBoard(IEnumerable<Ship> ships, int maxWidth, int maxHeight)
         {
-            foreach (var ship in ships)
+            for (int index = 1; index <= ships.Count(); index++)
             {
                 bool result = false;
 
@@ -38,20 +38,24 @@
                     var StartPoint = new Square()
                     {
                         Row = random.Next(1, 10),
-                        Column = this.axis[column]
+                        Column = this.axis[column],
+                        ShipIdentifier = index
+
                     };
+                    Ships[index - 1].Id = index;
                     location.Add(StartPoint);
 
                     bool isVertical = random.NextDouble() >= 0.5;
 
-                    for (int i = 1; i <= ship.Width-1; i++)
+                    for (int i = 1; i <= Ships[index - 1].Width - 1; i++)
                     {
                         if (isVertical)
                         {
                             location.Add(new Square()
                             {
                                 Row = (StartPoint.Row + i),
-                                Column = StartPoint.Column
+                                Column = StartPoint.Column,
+                                ShipIdentifier = i
                             });
                         }
                         else
@@ -59,16 +63,17 @@
                             location.Add(new Square()
                             {
                                 Row = StartPoint.Row,
-                                Column = this.axis[(this.axis.IndexOf(StartPoint.Column) + i) > maxWidth ? 1 : (this.axis.IndexOf(StartPoint.Column) + i)]
+                                Column = this.axis[(this.axis.IndexOf(StartPoint.Column) + i) > maxWidth ? 1 : (this.axis.IndexOf(StartPoint.Column) + i)],
+                                ShipIdentifier = i
                             });
                         }
                     }
 
-                    ShipService service = new ShipService(location, this.coordinates);
+                    Boardhelper service = new Boardhelper(location, this.coordinates);
 
-                    if (service.IsValidLocation(ship.Width))
+                    if (service.IsValidLocation(Ships[index - 1].Width))
                     {
-                        service.AddToBoard(ship.Id);
+                        service.AddToBoard(Ships[index - 1].Id);
                     }
                     else
                     {
