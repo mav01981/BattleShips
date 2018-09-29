@@ -4,17 +4,21 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Game : Board, IGame
+    public class Game
     {
         public delegate void ShipEvent(string message);
         public event ShipEvent RaiseEvent;
 
         public List<Ship> Ships { get; }
 
-        public Game(IBoardDimension size) : base(size)
+        public Board board {  get;}
+
+        public Game(IBoardDimension size) 
         {
+            this.board = new Board(size);
+
             Ships = new List<Ship>();
-            Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Battleship, "HMS Barham")); /* Id = 1, Name = "HMS Barham", Width = 5 });*/
+            Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Battleship, "HMS Barham"));
             Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Destroyer, "Hobart-class destroyer"));
             Ships.Add(ShipFactory.CreateShip(ShipFactory.ShipType.Destroyer, "Kashin-class destroyer"));
 
@@ -31,14 +35,14 @@
                 {
                     Random random = new Random();
                     int row = random.Next(0, 10);
-                    int column = random.Next(this.axis.Length);
+                    int column = random.Next(this.board.axis.Length);
 
                     var location = new List<Square>();
 
                     var StartPoint = new Square()
                     {
                         Row = random.Next(1, 10),
-                        Column = this.axis[column],
+                        Column = this.board.axis[column],
                         ShipIdentifier = index
 
                     };
@@ -63,13 +67,13 @@
                             location.Add(new Square()
                             {
                                 Row = StartPoint.Row,
-                                Column = this.axis[(this.axis.IndexOf(StartPoint.Column) + i) > maxWidth ? 1 : (this.axis.IndexOf(StartPoint.Column) + i)],
+                                Column = this.board.axis[(this.board.axis.IndexOf(StartPoint.Column) + i) > maxWidth ? 1 : (this.board.axis.IndexOf(StartPoint.Column) + i)],
                                 ShipIdentifier = i
                             });
                         }
                     }
 
-                    Boardhelper service = new Boardhelper(location, this.coordinates);
+                    Boardhelper service = new Boardhelper(location, this.board.coordinates);
 
                     if (service.IsValidLocation(Ships[index - 1].Width))
                     {
@@ -87,7 +91,7 @@
 
         public Shot TakeShot(char column, int row)
         {
-            var selectedPoint = this.coordinates.Where(x => x.Column == column && x.Row == row).FirstOrDefault();
+            var selectedPoint = this.board.coordinates.Where(x => x.Column == column && x.Row == row).FirstOrDefault();
 
             if (selectedPoint.ShipIdentifier > 0 & selectedPoint.Occupied != Status.Hit)
             {

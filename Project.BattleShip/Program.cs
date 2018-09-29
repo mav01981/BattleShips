@@ -51,23 +51,24 @@ namespace Project.BattleShip
         {
             bool run = true;
 
+            var board = new BoardDimension(10, 10);
+            Game game = new Game(board);
+            game.RaiseEvent += notifyUser;
+
             while (run)
-            {
-                var board = new BoardDimension(10, 10);
-                Game game = new Game(board);
-                game.RaiseEvent += notifyUser;
+            {      
 
                 Console.WriteLine("\n Battleship v1");
                 Console.WriteLine();
 
-                Draw(10, game.coordinates);
+                Draw(10, game.board.coordinates);
 
                 Console.WriteLine("\n Please enter your move e.g A5 and press enter ?");
                 string coordinate = Console.ReadLine();
 
                 char[] keys = coordinate.Trim().ToUpper().ToCharArray();
 
-                if (keys.Length > 0 && game.axis.Contains(keys[0]))
+                if (keys.Length > 0 && game.board.axis.Contains(keys[0]))
                 {
                     if (int.TryParse(coordinate.Substring(1, coordinate.Length - 1), out int row))
                     {
@@ -108,6 +109,10 @@ namespace Project.BattleShip
 
                                 Console.ReadLine();
                             }
+                        }
+                        else if (result == Shot.Sinks)
+                        {
+                            Console.ReadLine();
                         }
                         else
                         {
